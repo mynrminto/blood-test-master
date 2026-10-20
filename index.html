@@ -1,10 +1,4 @@
-<!doctype html><html lang="ja"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="vn-portrait-fix">
-/* 縦長の画面（スマホ縦持ち）では、16:9 の CG を切り抜かず全体を上寄せで見せる */
-@media (max-aspect-ratio: 1/1){
-  body .vn{background:linear-gradient(#2a2340,#1b1530)}
-  .vn .vn-cg{background-size:contain,contain;background-position:center 30%,center 30%;background-color:transparent;animation:none}
-}
-</style></head><body>
+<!doctype html><html lang="ja"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>触って覚える！ 血液検査マスター</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -372,6 +366,12 @@ input[type=range]{width:100%;accent-color:var(--chap);height:28px}
 .vn-text.narr{color:#767898}
 .vn-next{position:absolute;right:16px;bottom:6px;font-size:12px;color:#FF5E8A;font-weight:700;animation:vnfloat 1.2s ease-in-out infinite}
 .vn-skip{position:absolute;z-index:3;top:calc(14px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));background:rgba(255,255,255,.92);border:2px solid #2E2545;border-radius:99px;padding:2px 14px;font-weight:700;font-size:13px;cursor:pointer}
+.vn-bd{display:none}
+/* 縦長の画面では場面の絵（16:9）を切らずに全体を見せる。うしろは同じ絵をぼかして敷く */
+@media (orientation:portrait){
+.vn-bd{display:block;position:absolute;inset:0;background:#2a2340 center/cover no-repeat;filter:blur(16px) brightness(.55);transform:scale(1.15)}
+.vn-cg{inset:auto 0;top:max(calc(env(safe-area-inset-top,0px) + 58px),calc((100% - 220px - 56.25vw) / 2));width:100%;height:auto;aspect-ratio:16/9;background-size:contain;background-color:transparent;animation:none;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+}
 @keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.1) translate(-1.5%,-1%)}}
 @keyframes vnfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.vn-cg,.vn-next{animation:none}}
@@ -894,7 +894,7 @@ function playStory(sc){
     if(!sc||vnBusy){done();return}
     vnBusy=true;VN_TRACK=sc.bgm||vnTrack(sc);bgm();
     if(!vnEl){vnEl=document.createElement("div");vnEl.className="vn";document.body.appendChild(vnEl)}
-    vnEl.innerHTML=`<div class="vn-cg" style="background-image:url(${IMG(sc.cg)}),url(${IMG("bg_lab","jpg")})"></div>
+    vnEl.innerHTML=`<div class="vn-bd" style="background-image:url(${IMG(sc.cg)}),url(${IMG("bg_lab","jpg")})"></div><div class="vn-cg" style="background-image:url(${IMG(sc.cg)}),url(${IMG("bg_lab","jpg")})"></div>
       ${sc.chap?`<div class="vn-chap"><div class="tm">${[sc.chap.time,esc(sc.chap.place)].filter(Boolean).join("　")}</div><div class="tt">${esc(sc.chap.title)}</div></div>`:""}
       <div class="vn-box"><div class="vn-name" hidden></div><div class="vn-text"></div><div class="vn-next">▼ タップで次へ</div></div>
       <button class="vn-skip" type="button">スキップ ▶▶</button>`;
