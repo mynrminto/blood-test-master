@@ -1511,6 +1511,11 @@ document.addEventListener("input",e=>{const t=e.target;if(!t.dataset||!t.dataset
 
 render();
 showTitle();
+/* 開き直したときもタイトルから。iPhoneのSafariやホーム画面アプリは、ページを読み直さずに前の画面を復元することがある */
+const backToTitle=()=>{if(vnBusy)return;S.view="home";render();showTitle()};
+addEventListener("pageshow",e=>{if(e.persisted)backToTitle()});
+let hiddenAt=0;
+document.addEventListener("visibilitychange",()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>10*60*1000)backToTitle()});
 </script>
 
 </body></html>
